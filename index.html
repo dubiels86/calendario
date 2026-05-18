@@ -591,7 +591,7 @@
             outline-offset: 2px;
         }
 
-        .share-jornada-btn {
+        .share-jornada-btn, .share-standings-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -605,7 +605,7 @@
             transition: all 0.2s;
         }
 
-        .share-jornada-btn:hover {
+        .share-jornada-btn:hover, .share-standings-btn:hover {
             background: var(--accent-light);
             transform: scale(1.05);
         }
@@ -735,7 +735,18 @@
                 <!-- Grupo A -->
                 <div class="jornada-section standings-grupo-a">
                     <div class="jornada-header">
-                        <h3 class="font-display text-lg text-[var(--gold)]">GRUPO A</h3>
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-display text-lg text-[var(--gold)]">GRUPO A</h3>
+                            <button class="share-standings-btn" data-grupo="A" title="Compartir Tabla Grupo A">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -760,7 +771,18 @@
                 <!-- Grupo B -->
                 <div class="jornada-section standings-grupo-b">
                     <div class="jornada-header">
-                        <h3 class="font-display text-lg text-[var(--gold)]">GRUPO B</h3>
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-display text-lg text-[var(--gold)]">GRUPO B</h3>
+                            <button class="share-standings-btn" data-grupo="B" title="Compartir Tabla Grupo B">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
@@ -1102,9 +1124,17 @@
                     else if (index === 2) positionClass += ' text-[var(--accent)]'; // 3er lugar
                     else positionClass = 'font-semibold text-[var(--muted)]';
                     
+                    const teamObj = getTeam(team.name);
                     row.innerHTML = `
                         <td class="p-2 ${positionClass}">${index + 1}</td>
-                        <td class="p-2 font-medium">${team.name}</td>
+                        <td class="p-2 font-medium">
+                            <div class="flex items-center gap-2">
+                                <div class="team-logo-wrapper" style="width: 24px; height: 24px; border-radius: 4px;">
+                                    ${getLogoHTML(teamObj, true)}
+                                </div>
+                                <span>${team.name}</span>
+                            </div>
+                        </td>
                         <td class="text-center p-2 font-semibold text-[var(--win)]">${team.jg}</td>
                         <td class="text-center p-2 font-semibold text-[var(--loss)]">${team.jp}</td>
                         <td class="text-center p-2">${team.cf}</td>
@@ -1143,9 +1173,17 @@
                     else if (index === 2) positionClass += ' text-[var(--accent)]'; // 3er lugar
                     else positionClass = 'font-semibold text-[var(--muted)]';
                     
+                    const teamObj = getTeam(team.name);
                     row.innerHTML = `
                         <td class="p-2 ${positionClass}">${index + 1}</td>
-                        <td class="p-2 font-medium">${team.name}</td>
+                        <td class="p-2 font-medium">
+                            <div class="flex items-center gap-2">
+                                <div class="team-logo-wrapper" style="width: 24px; height: 24px; border-radius: 4px;">
+                                    ${getLogoHTML(teamObj, true)}
+                                </div>
+                                <span>${team.name}</span>
+                            </div>
+                        </td>
                         <td class="text-center p-2 font-semibold text-[var(--win)]">${team.jg}</td>
                         <td class="text-center p-2 font-semibold text-[var(--loss)]">${team.jp}</td>
                         <td class="text-center p-2">${team.cf}</td>
@@ -1161,6 +1199,32 @@
             console.log('Tablas de posiciones actualizadas correctamente');
         }
         // ==================== SHARE FUNCTIONALITY ====================
+        function generateStandingsShareText(grupo) {
+            const standings = calculateStandings();
+            const grupoData = grupo === 'A' ? standings.grupoA : standings.grupoB;
+            
+            let shareText = `🏆 ESTRELLAS DE LA CAPITAL 2026\n📊 TABLA DE POSICIONES - GRUPO ${grupo}\n\n`;
+            shareText += `Pos | Equipo | J.G | J.P | C.F | C.P | DIF\n`;
+            shareText += `----+--------+-----+-----+-----+-----+----\n`;
+            
+            grupoData.forEach((team, index) => {
+                const pos = (index + 1).toString().padStart(2, ' ');
+                const name = team.name.substring(0, 12).padEnd(12, ' ');
+                const jg = team.jg.toString().padStart(3, ' ');
+                const jp = team.jp.toString().padStart(3, ' ');
+                const cf = team.cf.toString().padStart(3, ' ');
+                const cp = team.cp.toString().padStart(3, ' ');
+                const dif = (team.dif >= 0 ? '+' + team.dif : team.dif.toString()).padStart(4, ' ');
+                
+                shareText += `${pos} | ${name} | ${jg} | ${jp} | ${cf} | ${cp} | ${dif}\n`;
+            });
+            
+            shareText += '\n🏟️ Torneo de Béisbol Cubano\n';
+            shareText += '📱 Ver calendario completo:';
+            
+            return shareText;
+        }
+
         function generateJornadaShareText(jornadaNum) {
             // Buscar la jornada específica
             const jornada = jornadasData.find(j => j.numero === jornadaNum);
@@ -1254,6 +1318,73 @@
         function shareJornadaToTelegram(jornadaNum) {
             const text = generateJornadaShareText(jornadaNum);
             const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
+            const fullText = `${text}\n\n🔗 ${url}`;
+            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(fullText)}`;
+            window.open(telegramUrl, '_blank');
+        }
+
+        // ==================== STANDINGS SHARE FUNCTIONALITY ====================
+        async function shareStandingsAsText(grupo) {
+            try {
+                const text = generateStandingsShareText(grupo);
+                const url = `${window.location.origin}${window.location.pathname}#standings-grupo-${grupo.toLowerCase()}`;
+                const fullText = text + '\n' + url;
+                
+                // Verificar si el navegador soporta Web Share API
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: `Tabla de Posiciones Grupo ${grupo} - Estrellas de la Capital`,
+                            text: fullText
+                        });
+                        return;
+                    } catch (err) {
+                        console.log('Web Share API falló, usando fallback:', err);
+                    }
+                }
+                
+                // Fallback: abrir modal de compartir
+                openStandingsShareModal(grupo);
+                
+            } catch (error) {
+                console.error('Error compartiendo tabla de posiciones:', error);
+                showToast('Error al compartir tabla de posiciones');
+            }
+        }
+
+        function openStandingsShareModal(grupo) {
+            // Actualizar el modal para esta tabla específica
+            document.getElementById('shareModalTitle').textContent = `Compartir Tabla Grupo ${grupo}`;
+            document.getElementById('shareModal').setAttribute('data-standings-grupo', grupo);
+            document.getElementById('shareModal').removeAttribute('data-jornada');
+            toggleShareModal();
+        }
+
+        function shareStandingsToWhatsApp(grupo) {
+            const text = generateStandingsShareText(grupo);
+            const url = `${window.location.origin}${window.location.pathname}#standings-grupo-${grupo.toLowerCase()}`;
+            const fullText = `${text}\n\n🔗 ${url}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullText)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function shareStandingsToFacebook(grupo) {
+            const url = `${window.location.origin}${window.location.pathname}#standings-grupo-${grupo.toLowerCase()}`;
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            window.open(facebookUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareStandingsToTwitter(grupo) {
+            const text = generateStandingsShareText(grupo);
+            const url = `${window.location.origin}${window.location.pathname}#standings-grupo-${grupo.toLowerCase()}`;
+            const fullText = `${text}\n\n🔗 ${url}`;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(fullText)}`;
+            window.open(twitterUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareStandingsToTelegram(grupo) {
+            const text = generateStandingsShareText(grupo);
+            const url = `${window.location.origin}${window.location.pathname}#standings-grupo-${grupo.toLowerCase()}`;
             const fullText = `${text}\n\n🔗 ${url}`;
             const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(fullText)}`;
             window.open(telegramUrl, '_blank');
@@ -1821,6 +1952,12 @@
                     const jornadaNum = e.target.closest('.share-jornada-btn').dataset.jornada;
                     shareJornadaAsText(parseInt(jornadaNum));
                 }
+                
+                // Share functionality for standings tables
+                if (e.target.closest('.share-standings-btn')) {
+                    const grupo = e.target.closest('.share-standings-btn').dataset.grupo;
+                    shareStandingsAsText(grupo);
+                }
             });
 
             const shareModal = document.getElementById('shareModal');
@@ -1837,22 +1974,46 @@
 
             shareWhatsApp.addEventListener('click', () => {
                 const jornadaNum = shareModal.getAttribute('data-jornada');
-                shareJornadaToWhatsApp(parseInt(jornadaNum));
+                const standingsGrupo = shareModal.getAttribute('data-standings-grupo');
+                
+                if (jornadaNum) {
+                    shareJornadaToWhatsApp(parseInt(jornadaNum));
+                } else if (standingsGrupo) {
+                    shareStandingsToWhatsApp(standingsGrupo);
+                }
                 toggleShareModal();
             });
             shareFacebook.addEventListener('click', () => {
                 const jornadaNum = shareModal.getAttribute('data-jornada');
-                shareJornadaToFacebook(parseInt(jornadaNum));
+                const standingsGrupo = shareModal.getAttribute('data-standings-grupo');
+                
+                if (jornadaNum) {
+                    shareJornadaToFacebook(parseInt(jornadaNum));
+                } else if (standingsGrupo) {
+                    shareStandingsToFacebook(standingsGrupo);
+                }
                 toggleShareModal();
             });
             shareTwitter.addEventListener('click', () => {
                 const jornadaNum = shareModal.getAttribute('data-jornada');
-                shareJornadaToTwitter(parseInt(jornadaNum));
+                const standingsGrupo = shareModal.getAttribute('data-standings-grupo');
+                
+                if (jornadaNum) {
+                    shareJornadaToTwitter(parseInt(jornadaNum));
+                } else if (standingsGrupo) {
+                    shareStandingsToTwitter(standingsGrupo);
+                }
                 toggleShareModal();
             });
             shareTelegram.addEventListener('click', () => {
                 const jornadaNum = shareModal.getAttribute('data-jornada');
-                shareJornadaToTelegram(parseInt(jornadaNum));
+                const standingsGrupo = shareModal.getAttribute('data-standings-grupo');
+                
+                if (jornadaNum) {
+                    shareJornadaToTelegram(parseInt(jornadaNum));
+                } else if (standingsGrupo) {
+                    shareStandingsToTelegram(standingsGrupo);
+                }
                 toggleShareModal();
             });
 

@@ -879,7 +879,7 @@
                     </svg>
                 </button>
             </div>
-            <p class="text-sm text-[var(--muted)] mb-4">La imagen se ha descargado. Comparte el enlace:</p>
+            <p class="text-sm text-[var(--muted)] mb-4">Comparte los resultados de la jornada:</p>
             <div class="grid grid-cols-2 gap-3">
                 <button id="shareWhatsApp" class="flex items-center gap-3 p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -1033,7 +1033,7 @@
             jornadasData.forEach((jornada) => {
                 jornada.fechas.forEach(fecha => {
                     fecha.partidos.forEach(partido => {
-                        if (partido.goles1 !== undefined && partido.goles2 !== undefined) {
+                        if (partido.carreras1 !== undefined && partido.carreras2 !== undefined) {
                             const team1 = allTeams.get(partido.equipo1);
                             const team2 = allTeams.get(partido.equipo2);
                             
@@ -1041,16 +1041,16 @@
                                 partidosProcessed++;
                                 
                                 // Actualizar carreras
-                                team1.cf += partido.goles1;
-                                team1.cp += partido.goles2;
-                                team2.cf += partido.goles2;
-                                team2.cp += partido.goles1;
+                                team1.cf += partido.carreras1;
+                                team1.cp += partido.carreras2;
+                                team2.cf += partido.carreras2;
+                                team2.cp += partido.carreras1;
                                 
                                 // Determinar ganador y perdedor
-                                if (partido.goles1 > partido.goles2) {
+                                if (partido.carreras1 > partido.carreras2) {
                                     team1.jg++;
                                     team2.jp++;
-                                } else if (partido.goles2 > partido.goles1) {
+                                } else if (partido.carreras2 > partido.carreras1) {
                                     team2.jg++;
                                     team1.jp++;
                                 }
@@ -1130,63 +1130,64 @@
         }
         // ==================== SHARE FUNCTIONALITY ====================
         function generateJornadaShareText(jornadaNum) {
-            return `🏟️ Estrellas de la Capital 2026 - Jornada ${jornadaNum}\n\n⚾ Resultados del Torneo de Béisbol\n\n🏆 ¡Síguenos para más actualizaciones!`;
+            // Buscar la jornada específica
+            const jornada = jornadasData.find(j => j.numero === jornadaNum);
+            if (!jornada) return '';
+            
+            let shareText = `🏟️ ESTRELLAS DE LA CAPITAL 2026\n⚾ JORNADA ${jornadaNum}\n\n`;
+            
+            jornada.fechas.forEach(fecha => {
+                shareText += `📅 ${fecha.dia}\n`;
+                fecha.partidos.forEach(partido => {
+                    if (partido.carreras1 !== undefined && partido.carreras2 !== undefined) {
+                        // Partido con resultado
+                        const ganador = partido.carreras1 > partido.carreras2 ? partido.equipo1 : partido.equipo2;
+                        shareText += `${partido.hora} | ${partido.equipo1} ${partido.carreras1}-${partido.carreras2} ${partido.equipo2}\n`;
+                    } else {
+                        // Partido por jugar
+                        shareText += `${partido.hora} | ${partido.equipo1} vs ${partido.equipo2}\n`;
+                    }
+                });
+                shareText += '\n';
+            });
+            
+            shareText += '🏆 Torneo de Béisbol Cubano\n';
+            shareText += '📱 Ver calendario completo:';
+            
+            return shareText;
         }
 
-        async function shareJornadaAsImage(jornadaNum) {
+        async function shareJornadaAsText(jornadaNum) {
             try {
-                // Encontrar la sección de la jornada específica
-                const jornadaSection = document.querySelector(`[data-jornada-section="${jornadaNum}"]`);
-                if (!jornadaSection) {
-                    showToast('Error: No se encontró la jornada');
-                    return;
-                }
-
-                // Crear canvas de la jornada específica
-                const canvas = await html2canvas(jornadaSection, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: '#0a0a0a',
-                    logging: false,
-                    width: jornadaSection.offsetWidth,
-                    height: jornadaSection.offsetHeight
-                });
-
-                // Convertir a blob
-                canvas.toBlob(async (blob) => {
-                    const text = generateJornadaShareText(jornadaNum);
-                    
-                    if (navigator.share && navigator.canShare) {
-                        // Usar Web Share API si está disponible
-                        try {
-                            await navigator.share({
-                                title: `Jornada ${jornadaNum} - Estrellas de la Capital`,
-                                text: text,
-                                files: [new File([blob], `jornada-${jornadaNum}.png`, { type: 'image/png' })]
-                            });
-                        } catch (err) {
-                            // Fallback a descarga
-                            downloadJornadaImage(canvas, jornadaNum);
-                        }
-                    } else {
-                        // Fallback: descargar imagen y abrir modal de compartir
-                        downloadJornadaImage(canvas, jornadaNum);
-                        openShareModal(jornadaNum);
+                const text = generateJornadaShareText(jornadaNum);
+                const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
+                const fullText = text + '\n' + url;
+                
+                // Verificar si el navegador soporta Web Share API
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: `Jornada ${jornadaNum} - Estrellas de la Capital`,
+                            text: fullText
+                        });
+                        return;
+                    } catch (err) {
+                        console.log('Web Share API falló, usando fallback:', err);
                     }
-                }, 'image/png');
-
+                }
+                
+                // Fallback: abrir modal de compartir
+                openShareModal(jornadaNum);
+                
             } catch (error) {
-                console.error('Error generando imagen:', error);
-                showToast('Error generando imagen para compartir');
+                console.error('Error compartiendo jornada:', error);
+                showToast('Error al compartir jornada');
             }
         }
 
         function downloadJornadaImage(canvas, jornadaNum) {
-            const link = document.createElement('a');
-            link.download = `estrellas-capital-jornada-${jornadaNum}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-            showToast(`Imagen de Jornada ${jornadaNum} descargada`);
+            // Esta función ya no se usa, pero la mantenemos por compatibilidad
+            showToast(`Texto de Jornada ${jornadaNum} preparado para compartir`);
         }
 
         function openShareModal(jornadaNum) {
@@ -1199,7 +1200,8 @@
         function shareJornadaToWhatsApp(jornadaNum) {
             const text = generateJornadaShareText(jornadaNum);
             const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + '\n\n' + url)}`;
+            const fullText = `${text}\n\n🔗 ${url}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullText)}`;
             window.open(whatsappUrl, '_blank');
         }
 
@@ -1212,14 +1214,16 @@
         function shareJornadaToTwitter(jornadaNum) {
             const text = generateJornadaShareText(jornadaNum);
             const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
-            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+            const fullText = `${text}\n\n🔗 ${url}`;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(fullText)}`;
             window.open(twitterUrl, '_blank', 'width=600,height=400');
         }
 
         function shareJornadaToTelegram(jornadaNum) {
             const text = generateJornadaShareText(jornadaNum);
             const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
-            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+            const fullText = `${text}\n\n🔗 ${url}`;
+            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(fullText)}`;
             window.open(telegramUrl, '_blank');
         }
 
@@ -1235,21 +1239,21 @@
                     {
                         dia: 'Viernes 15 de Mayo', esSabado: false,
                         partidos: [
-                            { hora: '10:00', equipo1: 'Metros', equipo2: 'Tiburones del Este', goles1: 7, goles2: 2 },
-                            { hora: '11:40', equipo1: 'Los Santiagueros', equipo2: 'Guerreros de CH', goles1: 4, goles2: 5 },
-                            { hora: '1:20', equipo1: 'Wao Pedro', equipo2: 'Union', goles1: 10, goles2: 7 },
-                            { hora: '3:00', equipo1: 'Royals del Cerro', equipo2: 'Carlos x Siempre', goles1: 1, goles2: 5 },
-                            { hora: '4:40', equipo1: 'Gigantes del Vedado', equipo2: 'La Oficina', goles1: 4, goles2: 6 }
+                            { hora: '10:00', equipo1: 'Metros', equipo2: 'Tiburones del Este', carreras1: 7, carreras2: 2 },
+                            { hora: '11:40', equipo1: 'Los Santiagueros', equipo2: 'Guerreros de CH', carreras1: 4, carreras2: 5 },
+                            { hora: '1:20', equipo1: 'Wao Pedro', equipo2: 'Union', carreras1: 10, carreras2: 7 },
+                            { hora: '3:00', equipo1: 'Royals del Cerro', equipo2: 'Carlos x Siempre', carreras1: 1, carreras2: 5 },
+                            { hora: '4:40', equipo1: 'Gigantes del Vedado', equipo2: 'La Oficina', carreras1: 4, carreras2: 6 }
                         ]
                     },
                     {
                         dia: 'Sabado 16 de Mayo', esSabado: true,
                         partidos: [
-                            { hora: '9:00', equipo1: 'Indomables', equipo2: 'Bebedores', goles1: 8, goles2: 9 },
-                            { hora: '10:40', equipo1: 'Alazanes', equipo2: 'W. Sox', goles1: 4, goles2: 7 },
-                            { hora: '12:20', equipo1: 'Avengers', equipo2: 'Titanes', goles1: 4, goles2: 13 },
-                            { hora: '2:00', equipo1: 'Guerreros de PN', equipo2: 'Huracanes', goles1: 5, goles2: 7 },
-                            { hora: '3:40', equipo1: 'Indios', equipo2: 'Nacionales', goles1: 8, goles2: 4 }
+                            { hora: '9:00', equipo1: 'Indomables', equipo2: 'Bebedores', carreras1: 8, carreras2: 9 },
+                            { hora: '10:40', equipo1: 'Alazanes', equipo2: 'W. Sox', carreras1: 4, carreras2: 7 },
+                            { hora: '12:20', equipo1: 'Avengers', equipo2: 'Titanes', carreras1: 4, carreras2: 13 },
+                            { hora: '2:00', equipo1: 'Guerreros de PN', equipo2: 'Huracanes', carreras1: 5, carreras2: 7 },
+                            { hora: '3:40', equipo1: 'Indios', equipo2: 'Nacionales', carreras1: 8, carreras2: 4 }
                         ]
                     }
                 ]
@@ -1632,14 +1636,14 @@
                     fecha.partidos.forEach((partido) => {
                         const team1 = getTeam(partido.equipo1);
                         const team2 = getTeam(partido.equipo2);
-                        const hasResult = partido.goles1 !== undefined && partido.goles2 !== undefined;
+                        const hasResult = partido.carreras1 !== undefined && partido.carreras2 !== undefined;
                         
                         let team1Class = '', team2Class = '', score1Class = '', score2Class = '';
                         
                         if (hasResult) {
-                            if (partido.goles1 > partido.goles2) {
+                            if (partido.carreras1 > partido.carreras2) {
                                 team1Class = 'winner'; team2Class = 'loser'; score1Class = 'winner'; score2Class = 'loser';
-                            } else if (partido.goles2 > partido.goles1) {
+                            } else if (partido.carreras2 > partido.carreras1) {
                                 team1Class = 'loser'; team2Class = 'winner'; score1Class = 'loser'; score2Class = 'winner';
                             }
                         }
@@ -1661,9 +1665,9 @@
                                             <span class="team-name ${team1Class}">${team1.name}</span>
                                         </div>
                                         <div class="mobile-score">
-                                            <span class="score-number ${score1Class}">${partido.goles1}</span>
+                                            <span class="score-number ${score1Class}">${partido.carreras1}</span>
                                             <span class="score-divider">-</span>
-                                            <span class="score-number ${score2Class}">${partido.goles2}</span>
+                                            <span class="score-number ${score2Class}">${partido.carreras2}</span>
                                         </div>
                                         <div class="team-cell">
                                             <div class="team-logo-wrapper">${getLogoHTML(team2, true)}</div>
@@ -1702,9 +1706,9 @@
                                     </div>
                                     <div class="score-section">
                                         <div class="score-display">
-                                            <span class="score-number ${score1Class}">${partido.goles1}</span>
+                                            <span class="score-number ${score1Class}">${partido.carreras1}</span>
                                             <span class="score-divider">-</span>
-                                            <span class="score-number ${score2Class}">${partido.goles2}</span>
+                                            <span class="score-number ${score2Class}">${partido.carreras2}</span>
                                         </div>
                                         <span class="played-badge">Final</span>
                                     </div>
@@ -1778,7 +1782,7 @@
             document.addEventListener('click', (e) => {
                 if (e.target.closest('.share-jornada-btn')) {
                     const jornadaNum = e.target.closest('.share-jornada-btn').dataset.jornada;
-                    shareJornadaAsImage(parseInt(jornadaNum));
+                    shareJornadaAsText(parseInt(jornadaNum));
                 }
             });
 

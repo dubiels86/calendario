@@ -509,6 +509,26 @@
             color: var(--gold);
         }
 
+        /* Estilos para tablas de posiciones */
+        .standings-table {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .position-1 {
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(255, 214, 10, 0.05));
+            border-left: 3px solid var(--gold);
+        }
+
+        .position-2 {
+            background: linear-gradient(135deg, rgba(6, 214, 160, 0.1), rgba(6, 214, 160, 0.05));
+            border-left: 3px solid var(--win);
+        }
+
+        .position-3 {
+            background: linear-gradient(135deg, rgba(232, 93, 4, 0.1), rgba(232, 93, 4, 0.05));
+            border-left: 3px solid var(--accent);
+        }
+
         .scroll-top {
             position: fixed;
             bottom: 20px;
@@ -713,7 +733,7 @@
         <section class="mb-6 animate-fade-in delay-5">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Grupo A -->
-                <div class="jornada-section">
+                <div class="jornada-section standings-grupo-a">
                     <div class="jornada-header">
                         <h3 class="font-display text-lg text-[var(--gold)]">GRUPO A</h3>
                     </div>
@@ -721,6 +741,7 @@
                         <table class="w-full text-xs">
                             <thead>
                                 <tr class="border-b border-[var(--border)]">
+                                    <th class="text-left p-2 font-semibold">Pos</th>
                                     <th class="text-left p-2 font-semibold">Equipos</th>
                                     <th class="text-center p-2 font-semibold">J.G</th>
                                     <th class="text-center p-2 font-semibold">J.P</th>
@@ -729,62 +750,15 @@
                                     <th class="text-center p-2 font-semibold">DIF</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Metros</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Tiburones del Este</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">W. Sox</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Gigantes del Vedado</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Indomables</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Nacionales</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
+                            <tbody id="grupoATableBody">
+                                <!-- Se llena dinámicamente -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <!-- Grupo B -->
-                <div class="jornada-section">
+                <div class="jornada-section standings-grupo-b">
                     <div class="jornada-header">
                         <h3 class="font-display text-lg text-[var(--gold)]">GRUPO B</h3>
                     </div>
@@ -792,6 +766,7 @@
                         <table class="w-full text-xs">
                             <thead>
                                 <tr class="border-b border-[var(--border)]">
+                                    <th class="text-left p-2 font-semibold">Pos</th>
                                     <th class="text-left p-2 font-semibold">Equipos</th>
                                     <th class="text-center p-2 font-semibold">J.G</th>
                                     <th class="text-center p-2 font-semibold">J.P</th>
@@ -800,63 +775,8 @@
                                     <th class="text-center p-2 font-semibold">DIF</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Bebedores</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Avengers</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Guerreros de CH</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Los Santiagueros</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Titanes</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Royals del Cerro</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
-                                <tr class="hover:bg-[var(--card-hover)]">
-                                    <td class="p-2">Guerreros de PN</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                    <td class="text-center p-2">0</td>
-                                </tr>
+                            <tbody id="grupoBTableBody">
+                                <!-- Se llena dinámicamente -->
                             </tbody>
                         </table>
                     </div>
@@ -1044,27 +964,55 @@
             const grupoATeams = ['Metros', 'Tiburones del Este', 'W. Sox', 'Gigantes del Vedado', 'Indomables', 'Nacionales'];
             const grupoBTeams = ['Bebedores', 'Avengers', 'Guerreros de CH', 'Los Santiagueros', 'Titanes', 'Royals del Cerro', 'Guerreros de PN', 'Union', 'Huracanes', 'Carlos x Siempre', 'Wao Pedro', 'La Oficina', 'Alazanes', 'Indios'];
             
+            // Inicializar estadísticas para todos los equipos
             const standings = {
-                grupoA: grupoATeams.map(name => ({ name, jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 })),
-                grupoB: grupoBTeams.map(name => ({ name, jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 }))
+                grupoA: grupoATeams.map(name => ({ 
+                    name, 
+                    jg: 0,      // Juegos ganados
+                    jp: 0,      // Juegos perdidos
+                    jj: 0,      // Juegos jugados
+                    cf: 0,      // Carreras a favor
+                    cp: 0,      // Carreras en contra
+                    dif: 0,     // Diferencia de carreras
+                    pct: 0.000  // Porcentaje de victorias
+                })),
+                grupoB: grupoBTeams.map(name => ({ 
+                    name, 
+                    jg: 0, 
+                    jp: 0, 
+                    jj: 0, 
+                    cf: 0, 
+                    cp: 0, 
+                    dif: 0, 
+                    pct: 0.000 
+                }))
             };
 
-            // Crear mapa para búsqueda rápida
+            // Crear mapa para búsqueda rápida de equipos
             const allTeams = new Map();
             standings.grupoA.forEach(team => allTeams.set(team.name, team));
             standings.grupoB.forEach(team => allTeams.set(team.name, team));
 
-            // Procesar partidos con resultados
+            // Procesar todos los partidos con resultados
             let partidosProcessed = 0;
+            let totalPartidos = 0;
+            
             jornadasData.forEach((jornada) => {
                 jornada.fechas.forEach(fecha => {
                     fecha.partidos.forEach(partido => {
+                        totalPartidos++;
+                        
+                        // Verificar si el partido tiene resultado
                         if (partido.carreras1 !== undefined && partido.carreras2 !== undefined) {
                             const team1 = allTeams.get(partido.equipo1);
                             const team2 = allTeams.get(partido.equipo2);
                             
                             if (team1 && team2) {
                                 partidosProcessed++;
+                                
+                                // Actualizar juegos jugados
+                                team1.jj++;
+                                team2.jj++;
                                 
                                 // Actualizar carreras
                                 team1.cf += partido.carreras1;
@@ -1080,79 +1028,137 @@
                                     team2.jg++;
                                     team1.jp++;
                                 }
+                                // Nota: No hay empates en béisbol
                                 
-                                // Calcular diferencia
+                                // Calcular estadísticas derivadas
                                 team1.dif = team1.cf - team1.cp;
                                 team2.dif = team2.cf - team2.cp;
+                                
+                                // Calcular porcentaje de victorias
+                                team1.pct = team1.jj > 0 ? (team1.jg / team1.jj) : 0;
+                                team2.pct = team2.jj > 0 ? (team2.jg / team2.jj) : 0;
                             }
                         }
                     });
                 });
             });
 
-            console.log(`Partidos procesados: ${partidosProcessed}`);
+            // Función de ordenamiento para las tablas de posiciones
+            function sortTeams(a, b) {
+                // 1. Porcentaje de victorias (descendente)
+                if (b.pct !== a.pct) return b.pct - a.pct;
+                
+                // 2. Diferencia de carreras (descendente)
+                if (b.dif !== a.dif) return b.dif - a.dif;
+                
+                // 3. Carreras anotadas (descendente)
+                if (b.cf !== a.cf) return b.cf - a.cf;
+                
+                // 4. Carreras permitidas (ascendente - menos es mejor)
+                if (a.cp !== b.cp) return a.cp - b.cp;
+                
+                // 5. Orden alfabético como último criterio
+                return a.name.localeCompare(b.name);
+            }
 
-            // Filtrar y ordenar Grupo A
-            standings.grupoA = standings.grupoA.filter(team => grupoATeams.includes(team.name));
-            standings.grupoA.sort((a, b) => {
-                if (b.jg !== a.jg) return b.jg - a.jg;
-                return b.dif - a.dif;
-            });
-            
-            // Filtrar y ordenar Grupo B
-            standings.grupoB = standings.grupoB.filter(team => grupoBTeams.includes(team.name));
-            standings.grupoB.sort((a, b) => {
-                if (b.jg !== a.jg) return b.jg - a.jg;
-                return b.dif - a.dif;
-            });
+            // Ordenar ambos grupos
+            standings.grupoA.sort(sortTeams);
+            standings.grupoB.sort(sortTeams);
+
+            console.log(`Algoritmo de posiciones ejecutado:`);
+            console.log(`- Partidos procesados: ${partidosProcessed}/${totalPartidos}`);
+            console.log(`- Grupo A: ${standings.grupoA.length} equipos`);
+            console.log(`- Grupo B: ${standings.grupoB.length} equipos`);
 
             return standings;
         }
 
-        function updateStandingsTable() {
-            setTimeout(() => {
-                const standings = calculateStandings();
-                
-                // Actualizar Grupo A
-                const grupoATable = document.querySelector('.standings-grupo-a');
-                if (grupoATable) {
-                    const grupoARows = grupoATable.querySelectorAll('tbody tr');
-                    standings.grupoA.forEach((team, index) => {
-                        if (grupoARows[index]) {
-                            const cells = grupoARows[index].querySelectorAll('td');
-                            if (cells.length >= 6) {
-                                cells[0].textContent = team.name;
-                                cells[1].textContent = team.jg;
-                                cells[2].textContent = team.jp;
-                                cells[3].textContent = team.cf;
-                                cells[4].textContent = team.cp;
-                                cells[5].textContent = team.dif >= 0 ? `+${team.dif}` : team.dif.toString();
-                            }
-                        }
-                    });
-                }
-                
-                // Actualizar Grupo B
-                const grupoBTable = document.querySelector('.standings-grupo-b');
-                if (grupoBTable) {
-                    const grupoBRows = grupoBTable.querySelectorAll('tbody tr');
-                    standings.grupoB.forEach((team, index) => {
-                        if (grupoBRows[index]) {
-                            const cells = grupoBRows[index].querySelectorAll('td');
-                            if (cells.length >= 6) {
-                                cells[0].textContent = team.name;
-                                cells[1].textContent = team.jg;
-                                cells[2].textContent = team.jp;
-                                cells[3].textContent = team.cf;
-                                cells[4].textContent = team.cp;
-                                cells[5].textContent = team.dif >= 0 ? `+${team.dif}` : team.dif.toString();
-                            }
-                        }
-                    });
-                }
-                
-                console.log('Tablas actualizadas');
-            }, 100);
+        function renderStandingsTable() {
+            const standings = calculateStandings();
+            
+            // Renderizar Grupo A
+            const grupoATableBody = document.getElementById('grupoATableBody');
+            if (grupoATableBody) {
+                grupoATableBody.innerHTML = '';
+                standings.grupoA.forEach((team, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Aplicar clases especiales para los primeros 3 lugares
+                    let rowClass = 'hover:bg-[var(--card-hover)] standings-table';
+                    if (index === 0) rowClass += ' position-1';
+                    else if (index === 1) rowClass += ' position-2';
+                    else if (index === 2) rowClass += ' position-3';
+                    
+                    if (index < standings.grupoA.length - 1) {
+                        rowClass += ' border-b border-[var(--border)]';
+                    }
+                    
+                    row.className = rowClass;
+                    
+                    // Determinar color de posición
+                    let positionClass = 'font-bold';
+                    if (index === 0) positionClass += ' text-[var(--gold)]'; // 1er lugar
+                    else if (index === 1) positionClass += ' text-[var(--win)]'; // 2do lugar
+                    else if (index === 2) positionClass += ' text-[var(--accent)]'; // 3er lugar
+                    else positionClass = 'font-semibold text-[var(--muted)]';
+                    
+                    row.innerHTML = `
+                        <td class="p-2 ${positionClass}">${index + 1}</td>
+                        <td class="p-2 font-medium">${team.name}</td>
+                        <td class="text-center p-2 font-semibold text-[var(--win)]">${team.jg}</td>
+                        <td class="text-center p-2 font-semibold text-[var(--loss)]">${team.jp}</td>
+                        <td class="text-center p-2">${team.cf}</td>
+                        <td class="text-center p-2">${team.cp}</td>
+                        <td class="text-center p-2 font-semibold ${team.dif >= 0 ? 'text-[var(--win)]' : 'text-[var(--loss)]'}">
+                            ${team.dif >= 0 ? '+' : ''}${team.dif}
+                        </td>
+                    `;
+                    grupoATableBody.appendChild(row);
+                });
+            }
+            
+            // Renderizar Grupo B
+            const grupoBTableBody = document.getElementById('grupoBTableBody');
+            if (grupoBTableBody) {
+                grupoBTableBody.innerHTML = '';
+                standings.grupoB.forEach((team, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Aplicar clases especiales para los primeros 3 lugares
+                    let rowClass = 'hover:bg-[var(--card-hover)] standings-table';
+                    if (index === 0) rowClass += ' position-1';
+                    else if (index === 1) rowClass += ' position-2';
+                    else if (index === 2) rowClass += ' position-3';
+                    
+                    if (index < standings.grupoB.length - 1) {
+                        rowClass += ' border-b border-[var(--border)]';
+                    }
+                    
+                    row.className = rowClass;
+                    
+                    // Determinar color de posición
+                    let positionClass = 'font-bold';
+                    if (index === 0) positionClass += ' text-[var(--gold)]'; // 1er lugar
+                    else if (index === 1) positionClass += ' text-[var(--win)]'; // 2do lugar
+                    else if (index === 2) positionClass += ' text-[var(--accent)]'; // 3er lugar
+                    else positionClass = 'font-semibold text-[var(--muted)]';
+                    
+                    row.innerHTML = `
+                        <td class="p-2 ${positionClass}">${index + 1}</td>
+                        <td class="p-2 font-medium">${team.name}</td>
+                        <td class="text-center p-2 font-semibold text-[var(--win)]">${team.jg}</td>
+                        <td class="text-center p-2 font-semibold text-[var(--loss)]">${team.jp}</td>
+                        <td class="text-center p-2">${team.cf}</td>
+                        <td class="text-center p-2">${team.cp}</td>
+                        <td class="text-center p-2 font-semibold ${team.dif >= 0 ? 'text-[var(--win)]' : 'text-[var(--loss)]'}">
+                            ${team.dif >= 0 ? '+' : ''}${team.dif}
+                        </td>
+                    `;
+                    grupoBTableBody.appendChild(row);
+                });
+            }
+            
+            console.log('Tablas de posiciones actualizadas correctamente');
         }
         // ==================== SHARE FUNCTIONALITY ====================
         function generateJornadaShareText(jornadaNum) {
@@ -1557,6 +1563,7 @@
                     e.target.classList.add('active');
                     currentTeam = e.target.dataset.team;
                     renderMatches();
+                    renderStandingsTable(); // Actualizar posiciones cuando cambie el filtro
                 }
             });
         }
@@ -1982,6 +1989,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             init();
             initOfflineStatus();
+            // Actualizar tablas después de que todo esté cargado
+            setTimeout(() => {
+                renderStandingsTable();
+                console.log('Tablas de posiciones inicializadas automáticamente con resultados existentes');
+            }, 200);
         });
     </script>
 </body>

@@ -553,6 +553,25 @@
             outline-offset: 2px;
         }
 
+        .share-jornada-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .share-jornada-btn:hover {
+            background: var(--accent-light);
+            transform: scale(1.05);
+        }
+
         @media print {
             .bg-texture, .grid-lines { display: none !important; }
             body { background: white !important; color: black !important; }
@@ -566,12 +585,38 @@
     <div class="grid-lines"></div>
 
     <!-- Header -->
-    <header class="relative z-10 border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-xl sticky top-0">
+    <header class="relative z-50 border-b border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-xl sticky top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
             <div class="flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <div class="animate-slide-up">
-                        <div class="title-wrapper">
+                        <div class="title-wrapper flex items-center gap-3">
+                            <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+                                <!-- Pelota base -->
+                                <circle cx="50" cy="50" r="48" fill="#f8f9fa" stroke="#e9ecef" stroke-width="2"/>
+                                <!-- Costuras izquierda -->
+                                <path d="M25 30 Q35 45 30 50 Q25 55 35 70" stroke="#dc2626" stroke-width="2.5" fill="none"/>
+                                <!-- Costuras derecha -->
+                                <path d="M75 30 Q65 45 70 50 Q75 55 65 70" stroke="#dc2626" stroke-width="2.5" fill="none"/>
+                                <!-- Puntos de costura izquierda -->
+                                <circle cx="27" cy="32" r="1" fill="#dc2626"/>
+                                <circle cx="31" cy="37" r="1" fill="#dc2626"/>
+                                <circle cx="33" cy="42" r="1" fill="#dc2626"/>
+                                <circle cx="32" cy="47" r="1" fill="#dc2626"/>
+                                <circle cx="28" cy="52" r="1" fill="#dc2626"/>
+                                <circle cx="32" cy="57" r="1" fill="#dc2626"/>
+                                <circle cx="33" cy="62" r="1" fill="#dc2626"/>
+                                <circle cx="31" cy="67" r="1" fill="#dc2626"/>
+                                <!-- Puntos de costura derecha -->
+                                <circle cx="73" cy="32" r="1" fill="#dc2626"/>
+                                <circle cx="69" cy="37" r="1" fill="#dc2626"/>
+                                <circle cx="67" cy="42" r="1" fill="#dc2626"/>
+                                <circle cx="68" cy="47" r="1" fill="#dc2626"/>
+                                <circle cx="72" cy="52" r="1" fill="#dc2626"/>
+                                <circle cx="68" cy="57" r="1" fill="#dc2626"/>
+                                <circle cx="67" cy="62" r="1" fill="#dc2626"/>
+                                <circle cx="69" cy="67" r="1" fill="#dc2626"/>
+                            </svg>
                             <h1 class="font-display main-title">ESTRELLAS DE LA CAPITAL</h1>
                         </div>
                         <p class="text-xs mt-1" style="color: var(--muted);">Torneo 2026 - Calendario y Resultados</p>
@@ -822,7 +867,47 @@
         </div>
     </main>
 
-    <!-- Toast -->
+    <!-- Share Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 max-w-sm w-full animate-scale-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 id="shareModalTitle" class="font-semibold text-lg">Compartir Jornada</h3>
+                <button id="closeShareModal" class="p-1 hover:bg-[var(--card-hover)] rounded-lg transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-sm text-[var(--muted)] mb-4">La imagen se ha descargado. Comparte el enlace:</p>
+            <div class="grid grid-cols-2 gap-3">
+                <button id="shareWhatsApp" class="flex items-center gap-3 p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                    </svg>
+                    <span class="text-sm font-medium">WhatsApp</span>
+                </button>
+                <button id="shareFacebook" class="flex items-center gap-3 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span class="text-sm font-medium">Facebook</span>
+                </button>
+                <button id="shareTwitter" class="flex items-center gap-3 p-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    <span class="text-sm font-medium">X (Twitter)</span>
+                </button>
+                <button id="shareTelegram" class="flex items-center gap-3 p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                    <span class="text-sm font-medium">Telegram</span>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="toast" id="toast">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--win)" stroke-width="2">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
@@ -840,8 +925,19 @@
 
     <!-- Footer -->
     <footer class="relative z-10 border-t border-[var(--border)] mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 text-xs text-center" style="color: var(--muted);">
-            Estrellas de la Capital 2026 - Mayo a Julio
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="text-xs text-center sm:text-left" style="color: var(--muted);">
+                    Estrellas de la Capital 2026 - Mayo a Julio
+                </div>
+                <a href="https://wa.me/525654650092" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                    </svg>
+                    Contactar Web Master
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -918,40 +1014,23 @@
 
         // ==================== STANDINGS CALCULATION ====================
         function calculateStandings() {
+            // Definir grupos claramente
+            const grupoATeams = ['Metros', 'Tiburones del Este', 'W. Sox', 'Gigantes del Vedado', 'Indomables', 'Nacionales'];
+            const grupoBTeams = ['Bebedores', 'Avengers', 'Guerreros de CH', 'Los Santiagueros', 'Titanes', 'Royals del Cerro', 'Guerreros de PN', 'Union', 'Huracanes', 'Carlos x Siempre', 'Wao Pedro', 'La Oficina', 'Alazanes', 'Indios'];
+            
             const standings = {
-                grupoA: [
-                    { name: 'Metros', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Tiburones del Este', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'W. Sox', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Gigantes del Vedado', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Indomables', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Nacionales', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Alazanes', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'La Oficina', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Indios', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 }
-                ],
-                grupoB: [
-                    { name: 'Bebedores', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Avengers', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Guerreros de CH', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Los Santiagueros', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Titanes', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Royals del Cerro', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Guerreros de PN', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Union', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Huracanes', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Carlos x Siempre', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
-                    { name: 'Wao Pedro', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 }
-                ]
+                grupoA: grupoATeams.map(name => ({ name, jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 })),
+                grupoB: grupoBTeams.map(name => ({ name, jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 }))
             };
 
-            // Crear un mapa de todos los equipos para búsqueda rápida
+            // Crear mapa para búsqueda rápida
             const allTeams = new Map();
             standings.grupoA.forEach(team => allTeams.set(team.name, team));
             standings.grupoB.forEach(team => allTeams.set(team.name, team));
 
-            // Procesar todos los partidos con resultados
-            jornadasData.forEach(jornada => {
+            // Procesar partidos con resultados
+            let partidosProcessed = 0;
+            jornadasData.forEach((jornada) => {
                 jornada.fechas.forEach(fecha => {
                     fecha.partidos.forEach(partido => {
                         if (partido.goles1 !== undefined && partido.goles2 !== undefined) {
@@ -959,6 +1038,8 @@
                             const team2 = allTeams.get(partido.equipo2);
                             
                             if (team1 && team2) {
+                                partidosProcessed++;
+                                
                                 // Actualizar carreras
                                 team1.cf += partido.goles1;
                                 team1.cp += partido.goles2;
@@ -983,19 +1064,17 @@
                 });
             });
 
-            // Filtrar solo los equipos que pertenecen a cada grupo y ordenar
-            const grupoATeams = ['Metros', 'Tiburones del Este', 'W. Sox', 'Gigantes del Vedado', 'Indomables', 'Nacionales'];
-            const grupoBTeams = ['Bebedores', 'Avengers', 'Guerreros de CH', 'Los Santiagueros', 'Titanes', 'Royals del Cerro', 'Guerreros de PN'];
-            
-            standings.grupoA = standings.grupoA.filter(team => grupoATeams.includes(team.name));
-            standings.grupoB = standings.grupoB.filter(team => grupoBTeams.includes(team.name));
+            console.log(`Partidos procesados: ${partidosProcessed}`);
 
-            // Ordenar por juegos ganados, luego por diferencia
+            // Filtrar y ordenar Grupo A
+            standings.grupoA = standings.grupoA.filter(team => grupoATeams.includes(team.name));
             standings.grupoA.sort((a, b) => {
                 if (b.jg !== a.jg) return b.jg - a.jg;
                 return b.dif - a.dif;
             });
             
+            // Filtrar y ordenar Grupo B
+            standings.grupoB = standings.grupoB.filter(team => grupoBTeams.includes(team.name));
             standings.grupoB.sort((a, b) => {
                 if (b.jg !== a.jg) return b.jg - a.jg;
                 return b.dif - a.dif;
@@ -1005,36 +1084,151 @@
         }
 
         function updateStandingsTable() {
-            const standings = calculateStandings();
-            
-            // Actualizar Grupo A
-            const grupoARows = document.querySelectorAll('.standings-grupo-a tbody tr');
-            standings.grupoA.forEach((team, index) => {
-                if (grupoARows[index]) {
-                    const cells = grupoARows[index].querySelectorAll('td');
-                    cells[0].textContent = team.name;
-                    cells[1].textContent = team.jg;
-                    cells[2].textContent = team.jp;
-                    cells[3].textContent = team.cf;
-                    cells[4].textContent = team.cp;
-                    cells[5].textContent = team.dif > 0 ? `+${team.dif}` : team.dif;
+            setTimeout(() => {
+                const standings = calculateStandings();
+                
+                // Actualizar Grupo A
+                const grupoATable = document.querySelector('.standings-grupo-a');
+                if (grupoATable) {
+                    const grupoARows = grupoATable.querySelectorAll('tbody tr');
+                    standings.grupoA.forEach((team, index) => {
+                        if (grupoARows[index]) {
+                            const cells = grupoARows[index].querySelectorAll('td');
+                            if (cells.length >= 6) {
+                                cells[0].textContent = team.name;
+                                cells[1].textContent = team.jg;
+                                cells[2].textContent = team.jp;
+                                cells[3].textContent = team.cf;
+                                cells[4].textContent = team.cp;
+                                cells[5].textContent = team.dif >= 0 ? `+${team.dif}` : team.dif.toString();
+                            }
+                        }
+                    });
                 }
-            });
-            
-            // Actualizar Grupo B
-            const grupoBRows = document.querySelectorAll('.standings-grupo-b tbody tr');
-            standings.grupoB.forEach((team, index) => {
-                if (grupoBRows[index]) {
-                    const cells = grupoBRows[index].querySelectorAll('td');
-                    cells[0].textContent = team.name;
-                    cells[1].textContent = team.jg;
-                    cells[2].textContent = team.jp;
-                    cells[3].textContent = team.cf;
-                    cells[4].textContent = team.cp;
-                    cells[5].textContent = team.dif > 0 ? `+${team.dif}` : team.dif;
+                
+                // Actualizar Grupo B
+                const grupoBTable = document.querySelector('.standings-grupo-b');
+                if (grupoBTable) {
+                    const grupoBRows = grupoBTable.querySelectorAll('tbody tr');
+                    standings.grupoB.forEach((team, index) => {
+                        if (grupoBRows[index]) {
+                            const cells = grupoBRows[index].querySelectorAll('td');
+                            if (cells.length >= 6) {
+                                cells[0].textContent = team.name;
+                                cells[1].textContent = team.jg;
+                                cells[2].textContent = team.jp;
+                                cells[3].textContent = team.cf;
+                                cells[4].textContent = team.cp;
+                                cells[5].textContent = team.dif >= 0 ? `+${team.dif}` : team.dif.toString();
+                            }
+                        }
+                    });
                 }
-            });
+                
+                console.log('Tablas actualizadas');
+            }, 100);
         }
+        // ==================== SHARE FUNCTIONALITY ====================
+        function generateJornadaShareText(jornadaNum) {
+            return `🏟️ Estrellas de la Capital 2026 - Jornada ${jornadaNum}\n\n⚾ Resultados del Torneo de Béisbol\n\n🏆 ¡Síguenos para más actualizaciones!`;
+        }
+
+        async function shareJornadaAsImage(jornadaNum) {
+            try {
+                // Encontrar la sección de la jornada específica
+                const jornadaSection = document.querySelector(`[data-jornada-section="${jornadaNum}"]`);
+                if (!jornadaSection) {
+                    showToast('Error: No se encontró la jornada');
+                    return;
+                }
+
+                // Crear canvas de la jornada específica
+                const canvas = await html2canvas(jornadaSection, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#0a0a0a',
+                    logging: false,
+                    width: jornadaSection.offsetWidth,
+                    height: jornadaSection.offsetHeight
+                });
+
+                // Convertir a blob
+                canvas.toBlob(async (blob) => {
+                    const text = generateJornadaShareText(jornadaNum);
+                    
+                    if (navigator.share && navigator.canShare) {
+                        // Usar Web Share API si está disponible
+                        try {
+                            await navigator.share({
+                                title: `Jornada ${jornadaNum} - Estrellas de la Capital`,
+                                text: text,
+                                files: [new File([blob], `jornada-${jornadaNum}.png`, { type: 'image/png' })]
+                            });
+                        } catch (err) {
+                            // Fallback a descarga
+                            downloadJornadaImage(canvas, jornadaNum);
+                        }
+                    } else {
+                        // Fallback: descargar imagen y abrir modal de compartir
+                        downloadJornadaImage(canvas, jornadaNum);
+                        openShareModal(jornadaNum);
+                    }
+                }, 'image/png');
+
+            } catch (error) {
+                console.error('Error generando imagen:', error);
+                showToast('Error generando imagen para compartir');
+            }
+        }
+
+        function downloadJornadaImage(canvas, jornadaNum) {
+            const link = document.createElement('a');
+            link.download = `estrellas-capital-jornada-${jornadaNum}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            showToast(`Imagen de Jornada ${jornadaNum} descargada`);
+        }
+
+        function openShareModal(jornadaNum) {
+            // Actualizar el modal para esta jornada específica
+            document.getElementById('shareModalTitle').textContent = `Compartir Jornada ${jornadaNum}`;
+            document.getElementById('shareModal').setAttribute('data-jornada', jornadaNum);
+            toggleShareModal();
+        }
+
+        function shareJornadaToWhatsApp(jornadaNum) {
+            const text = generateJornadaShareText(jornadaNum);
+            const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + '\n\n' + url)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function shareJornadaToFacebook(jornadaNum) {
+            const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            window.open(facebookUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareJornadaToTwitter(jornadaNum) {
+            const text = generateJornadaShareText(jornadaNum);
+            const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+            window.open(twitterUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareJornadaToTelegram(jornadaNum) {
+            const text = generateJornadaShareText(jornadaNum);
+            const url = `${window.location.origin}${window.location.pathname}#jornada-${jornadaNum}`;
+            const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+            window.open(telegramUrl, '_blank');
+        }
+
+        function toggleShareModal() {
+            const modal = document.getElementById('shareModal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
         const jornadasData = [
             {
                 numero: 1, fechas: [
@@ -1387,6 +1581,7 @@
                 const section = document.createElement('div');
                 section.className = 'jornada-section animate-scale-in';
                 section.style.animationDelay = `${jIndex * 0.08}s`;
+                section.setAttribute('data-jornada-section', jornada.numero);
 
                 const header = document.createElement('div');
                 header.className = 'jornada-header';
@@ -1400,9 +1595,20 @@
                             </svg>
                             JORNADA ${jornada.numero}
                         </div>
-                        <span class="text-xs" style="color: var(--muted);">
-                            ${jornada.fechas.reduce((acc, f) => acc + f.partidos.length, 0)} partidos
-                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs" style="color: var(--muted);">
+                                ${jornada.fechas.reduce((acc, f) => acc + f.partidos.length, 0)} partidos
+                            </span>
+                            <button class="share-jornada-btn" data-jornada="${jornada.numero}" title="Compartir Jornada ${jornada.numero}">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 `;
                 section.appendChild(header);
@@ -1523,7 +1729,7 @@
                                         <span class="team-name">${team2.name}</span>
                                     </div>
                                     <div class="time-cell">
-                                        <span class="text-xs" style="color: var(--muted);">90 min</span>
+                                        <span class="text-xs" style="color: var(--muted);">Por jugar</span>
                                     </div>
                                 `;
                             }
@@ -1567,6 +1773,47 @@
 
             downloadPdfBtn.addEventListener('click', downloadPDF);
             printBtn.addEventListener('click', () => window.print());
+
+            // Share functionality for individual jornadas
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.share-jornada-btn')) {
+                    const jornadaNum = e.target.closest('.share-jornada-btn').dataset.jornada;
+                    shareJornadaAsImage(parseInt(jornadaNum));
+                }
+            });
+
+            const shareModal = document.getElementById('shareModal');
+            const closeShareModal = document.getElementById('closeShareModal');
+            const shareWhatsApp = document.getElementById('shareWhatsApp');
+            const shareFacebook = document.getElementById('shareFacebook');
+            const shareTwitter = document.getElementById('shareTwitter');
+            const shareTelegram = document.getElementById('shareTelegram');
+
+            closeShareModal.addEventListener('click', toggleShareModal);
+            shareModal.addEventListener('click', (e) => {
+                if (e.target === shareModal) toggleShareModal();
+            });
+
+            shareWhatsApp.addEventListener('click', () => {
+                const jornadaNum = shareModal.getAttribute('data-jornada');
+                shareJornadaToWhatsApp(parseInt(jornadaNum));
+                toggleShareModal();
+            });
+            shareFacebook.addEventListener('click', () => {
+                const jornadaNum = shareModal.getAttribute('data-jornada');
+                shareJornadaToFacebook(parseInt(jornadaNum));
+                toggleShareModal();
+            });
+            shareTwitter.addEventListener('click', () => {
+                const jornadaNum = shareModal.getAttribute('data-jornada');
+                shareJornadaToTwitter(parseInt(jornadaNum));
+                toggleShareModal();
+            });
+            shareTelegram.addEventListener('click', () => {
+                const jornadaNum = shareModal.getAttribute('data-jornada');
+                shareJornadaToTelegram(parseInt(jornadaNum));
+                toggleShareModal();
+            });
 
             let resizeTimeout;
             window.addEventListener('resize', () => {

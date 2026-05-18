@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estrellas de la Capital 2026</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Calendario y resultados del Torneo de Béisbol Estrellas de la Capital 2026">
+    <meta name="theme-color" content="#e85d04">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Estrellas 2026">
+    <meta name="msapplication-TileColor" content="#e85d04">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDgiIGZpbGw9IiNmOGY5ZmEiIHN0cm9rZT0iI2U5ZWNlZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTI1IDMwIFEzNSA0NSAzMCA1MCBRMjUgNTUgMzUgNzAiIHN0cm9rZT0iI2RjMjYyNiIgc3Ryb2tlLXdpZHRoPSIyLjUiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNNzUgMzAgUTY1IDQ1IDcwIDUwIFE3NSA1NSA2NSA3MCIgc3Ryb2tlPSIjZGMyNjI2IiBzdHJva2Utd2lkdGg9IjIuNSIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjQ4IiBmaWxsPSIjZjhmOWZhIiBzdHJva2U9IiNlOWVjZWYiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yNSAzMCBRMzUgNDUgMzAgNTAgUTI1IDU1IDM1IDcwIiBzdHJva2U9IiNkYzI2MjYiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTc1IDMwIFE2NSA0NSA3MCA1MCBRNzUgNTUgNjUgNzAiIHN0cm9rZT0iI2RjMjYyNiIgc3Ryb2tlLXdpZHRoPSIyLjUiIGZpbGw9Im5vbmUiLz48L3N2Zz4=">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -623,6 +641,14 @@
                     </div>
                     
                     <div class="flex items-center gap-2 animate-slide-up delay-2">
+                        <button class="action-btn secondary" id="installBtn" title="Instalar App" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <span class="hidden sm:inline">Instalar</span>
+                        </button>
                         <button class="action-btn secondary" id="printBtn" title="Imprimir">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 6 2 18 2 18 9"/>
@@ -1465,6 +1491,7 @@
         const emptyState = document.getElementById('emptyState');
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const installBtn = document.getElementById('installBtn');
         const printBtn = document.getElementById('printBtn');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
@@ -1777,6 +1804,9 @@
 
             downloadPdfBtn.addEventListener('click', downloadPDF);
             printBtn.addEventListener('click', () => window.print());
+            
+            // PWA Install functionality
+            initPWAInstall();
 
             // Share functionality for individual jornadas
             document.addEventListener('click', (e) => {
@@ -1831,9 +1861,128 @@
             renderTeamFilters();
             renderMatches();
             initEventListeners();
+            registerServiceWorker();
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        // ==================== SERVICE WORKER ====================
+        async function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register('./sw.js');
+                    console.log('Service Worker registrado:', registration);
+                    
+                    // Escuchar actualizaciones
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdateAvailable();
+                            }
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('Error registrando Service Worker:', error);
+                }
+            }
+        }
+
+        function showUpdateAvailable() {
+            const updateBanner = document.createElement('div');
+            updateBanner.className = 'fixed top-0 left-0 right-0 bg-[var(--accent)] text-white p-3 text-center z-[200] text-sm';
+            updateBanner.innerHTML = `
+                <span>Nueva versión disponible</span>
+                <button onclick="updateApp()" class="ml-3 px-3 py-1 bg-white text-[var(--accent)] rounded text-xs font-medium">
+                    Actualizar
+                </button>
+                <button onclick="this.parentElement.remove()" class="ml-2 px-2 py-1 text-white hover:bg-black/20 rounded text-xs">
+                    ×
+                </button>
+            `;
+            document.body.prepend(updateBanner);
+        }
+
+        function updateApp() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistration().then((registration) => {
+                    if (registration && registration.waiting) {
+                        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+
+        // ==================== PWA INSTALL ====================
+        let deferredPrompt;
+        
+        function initPWAInstall() {
+            // Verificar si ya está instalado
+            if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+                installBtn.style.display = 'none';
+            }
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.style.display = 'inline-flex';
+            });
+            
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        showToast('App instalada correctamente');
+                    }
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                }
+            });
+            
+            window.addEventListener('appinstalled', () => {
+                showToast('App instalada en tu dispositivo');
+                installBtn.style.display = 'none';
+            });
+        }
+
+        // ==================== OFFLINE STATUS ====================
+        function initOfflineStatus() {
+            function updateOnlineStatus() {
+                const isOnline = navigator.onLine;
+                const statusIndicator = document.getElementById('offlineIndicator');
+                
+                if (!isOnline && !statusIndicator) {
+                    const indicator = document.createElement('div');
+                    indicator.id = 'offlineIndicator';
+                    indicator.className = 'fixed bottom-4 left-4 bg-red-600 text-white px-3 py-2 rounded-lg text-sm z-[100] flex items-center gap-2';
+                    indicator.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+                            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+                            <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+                            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                            <line x1="12" y1="20" x2="12.01" y2="20"/>
+                        </svg>
+                        Modo Offline
+                    `;
+                    document.body.appendChild(indicator);
+                } else if (isOnline && statusIndicator) {
+                    statusIndicator.remove();
+                }
+            }
+            
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            updateOnlineStatus();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            initOfflineStatus();
+        });
     </script>
 </body>
 </html>

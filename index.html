@@ -114,8 +114,9 @@
         }
 
         .main-title {
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
-            letter-spacing: 2px;
+            font-size: clamp(1rem, 4vw, 2.8rem);
+            letter-spacing: 1px;
+            white-space: nowrap;
             background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -629,7 +630,7 @@
                 <div class="flex items-center justify-between">
                     <div class="animate-slide-up">
                         <div class="title-wrapper flex items-center gap-3">
-                            <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+                            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" class="hidden sm:block">
                                 <!-- Pelota base -->
                                 <circle cx="50" cy="50" r="48" fill="#f8f9fa" stroke="#e9ecef" stroke-width="2"/>
                                 <!-- Costuras izquierda -->

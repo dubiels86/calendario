@@ -304,32 +304,41 @@
         @media (max-width: 700px) {
             .match-row {
                 display: flex;
-                align-items: center;
+                flex-direction: column;
+                align-items: stretch;
                 padding: 10px 12px;
-                gap: 8px;
+                gap: 6px;
             }
 
-            .time-cell {
+            .match-row-time {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
-                gap: 2px;
-                min-width: 45px;
+                justify-content: space-between;
+                padding-bottom: 6px;
+                border-bottom: 1px solid var(--border);
+                margin-bottom: 2px;
             }
 
             .time-badge {
-                padding: 3px 6px;
-                font-size: 0.65rem;
+                padding: 3px 8px;
+                font-size: 0.7rem;
+            }
+
+            .match-row-content {
+                display: flex;
+                align-items: center;
+                gap: 6px;
             }
 
             .team-logo-wrapper {
-                width: 32px;
-                height: 32px;
-                border-radius: 8px;
+                width: 28px;
+                height: 28px;
+                border-radius: 6px;
+                border-width: 1px;
             }
 
             .team-logo-initials {
-                font-size: 0.7rem;
+                font-size: 0.6rem;
             }
 
             .team-cell, .team-cell.away {
@@ -337,85 +346,60 @@
                 text-align: left;
                 flex: 1;
                 min-width: 0;
+                gap: 6px;
             }
 
             .team-name {
-                font-size: 0.75rem;
+                font-size: 0.8rem;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 70px;
+                overflow: visible;
+                flex: 1;
             }
 
             .vs-cell {
                 display: none;
             }
 
-            .score-section {
-                flex-direction: row;
-                gap: 8px;
-                min-width: auto;
-            }
-
-            .score-display {
+            .mobile-score {
+                display: flex;
+                align-items: center;
                 gap: 4px;
+                padding: 0 6px;
+                background: var(--bg);
+                border-radius: 6px;
+                flex-shrink: 0;
             }
 
             .score-number {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .score-divider {
                 font-size: 0.7rem;
             }
 
-            .played-badge {
-                font-size: 0.5rem;
-            }
-
-            .match-separator {
-                color: var(--muted);
-                font-weight: 500;
-                font-size: 0.7rem;
-            }
-
-            /* Mobile specific layout */
-            .mobile-match-content {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                flex: 1;
-            }
-
-            .mobile-team-home {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                flex: 1;
-                justify-content: flex-end;
-            }
-
-            .mobile-team-away {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                flex: 1;
-            }
-
-            .mobile-score {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                padding: 0 8px;
-            }
-
             .mobile-vs {
-                padding: 2px 8px;
-                background: var(--bg);
+                padding: 3px 10px;
+                background: var(--accent);
                 border-radius: 4px;
                 font-size: 0.65rem;
                 font-weight: 700;
+                color: var(--bg);
+                flex-shrink: 0;
+            }
+
+            .time-cell {
+                display: contents;
+            }
+
+            .score-section {
+                display: none;
+            }
+
+            .played-badge-mobile {
+                font-size: 0.55rem;
                 color: var(--muted);
+                text-transform: uppercase;
             }
         }
 
@@ -608,7 +592,7 @@
                                 <polyline points="7 10 12 15 17 10"/>
                                 <line x1="12" y1="15" x2="12" y2="3"/>
                             </svg>
-                            <span class="hidden sm:inline">Descargar PDF</span>
+                            <span class="hidden sm:inline">PDF</span>
                         </button>
                     </div>
                 </div>
@@ -651,6 +635,161 @@
             <div class="stat-card animate-scale-in delay-4">
                 <div class="stat-number">10</div>
                 <p class="text-xs mt-1" style="color: var(--muted);">Jugados</p>
+            </div>
+        </section>
+
+        <!-- Standings Table -->
+        <section class="mb-6 animate-fade-in delay-5">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <!-- Grupo A -->
+                <div class="jornada-section">
+                    <div class="jornada-header">
+                        <h3 class="font-display text-lg text-[var(--gold)]">GRUPO A</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-[var(--border)]">
+                                    <th class="text-left p-2 font-semibold">Equipos</th>
+                                    <th class="text-center p-2 font-semibold">J.G</th>
+                                    <th class="text-center p-2 font-semibold">J.P</th>
+                                    <th class="text-center p-2 font-semibold">C.F</th>
+                                    <th class="text-center p-2 font-semibold">C.P</th>
+                                    <th class="text-center p-2 font-semibold">DIF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Metros</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Tiburones del Este</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">W. Sox</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Gigantes del Vedado</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Indomables</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Nacionales</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Grupo B -->
+                <div class="jornada-section">
+                    <div class="jornada-header">
+                        <h3 class="font-display text-lg text-[var(--gold)]">GRUPO B</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b border-[var(--border)]">
+                                    <th class="text-left p-2 font-semibold">Equipos</th>
+                                    <th class="text-center p-2 font-semibold">J.G</th>
+                                    <th class="text-center p-2 font-semibold">J.P</th>
+                                    <th class="text-center p-2 font-semibold">C.F</th>
+                                    <th class="text-center p-2 font-semibold">C.P</th>
+                                    <th class="text-center p-2 font-semibold">DIF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Bebedores</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Avengers</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Guerreros de CH</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Los Santiagueros</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Titanes</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="border-b border-[var(--border)] hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Royals del Cerro</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                                <tr class="hover:bg-[var(--card-hover)]">
+                                    <td class="p-2">Guerreros de PN</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                    <td class="text-center p-2">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -712,10 +851,12 @@
         // ============================================================
         
         const TEAM_LOGOS = {
-            1:  "", 2:  "", 3:  "", 4:  "", 5:  "",
-            6:  "", 7:  "", 8:  "", 9:  "", 10: "",
-            11: "", 12: "", 13: "", 14: "", 15: "",
-            16: "", 17: "", 18: "", 19: "", 20: ""
+            1:  "metros.jpeg", 2:  "tiburones.jpeg", 3:  "wsox.jpeg", 4:  "gigantes.jpeg",
+             5:  "indomables.png", 6:  "nationales.jpeg", 7:  "bebedores.jpeg", 
+             8:  "laoficina.jpeg", 9:  "alazanes.jpeg", 10: "indios.jpeg", 11: "avengers.jpeg",
+              12: "guerrerosch.jpeg", 13: "santiagueros.jpeg", 14: "titanes.jpeg", 15: "royals.jpeg",
+            16: "guerreros.jpeg", 17: "union.jpeg", 18: "huracanes.jpeg", 19: "carloxsiempre.jpeg",
+             20: "waopedro.jpeg"
         };
 
         const TEAM_COLORS = {
@@ -775,7 +916,125 @@
             return { id: 99, name: name.trim(), abbr: name.substring(0, 3).toUpperCase() };
         }
 
-        // ==================== MATCHES DATA ====================
+        // ==================== STANDINGS CALCULATION ====================
+        function calculateStandings() {
+            const standings = {
+                grupoA: [
+                    { name: 'Metros', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Tiburones del Este', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'W. Sox', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Gigantes del Vedado', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Indomables', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Nacionales', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Alazanes', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'La Oficina', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Indios', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 }
+                ],
+                grupoB: [
+                    { name: 'Bebedores', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Avengers', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Guerreros de CH', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Los Santiagueros', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Titanes', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Royals del Cerro', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Guerreros de PN', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Union', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Huracanes', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Carlos x Siempre', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 },
+                    { name: 'Wao Pedro', jg: 0, jp: 0, cf: 0, cp: 0, dif: 0 }
+                ]
+            };
+
+            // Crear un mapa de todos los equipos para búsqueda rápida
+            const allTeams = new Map();
+            standings.grupoA.forEach(team => allTeams.set(team.name, team));
+            standings.grupoB.forEach(team => allTeams.set(team.name, team));
+
+            // Procesar todos los partidos con resultados
+            jornadasData.forEach(jornada => {
+                jornada.fechas.forEach(fecha => {
+                    fecha.partidos.forEach(partido => {
+                        if (partido.goles1 !== undefined && partido.goles2 !== undefined) {
+                            const team1 = allTeams.get(partido.equipo1);
+                            const team2 = allTeams.get(partido.equipo2);
+                            
+                            if (team1 && team2) {
+                                // Actualizar carreras
+                                team1.cf += partido.goles1;
+                                team1.cp += partido.goles2;
+                                team2.cf += partido.goles2;
+                                team2.cp += partido.goles1;
+                                
+                                // Determinar ganador y perdedor
+                                if (partido.goles1 > partido.goles2) {
+                                    team1.jg++;
+                                    team2.jp++;
+                                } else if (partido.goles2 > partido.goles1) {
+                                    team2.jg++;
+                                    team1.jp++;
+                                }
+                                
+                                // Calcular diferencia
+                                team1.dif = team1.cf - team1.cp;
+                                team2.dif = team2.cf - team2.cp;
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Filtrar solo los equipos que pertenecen a cada grupo y ordenar
+            const grupoATeams = ['Metros', 'Tiburones del Este', 'W. Sox', 'Gigantes del Vedado', 'Indomables', 'Nacionales'];
+            const grupoBTeams = ['Bebedores', 'Avengers', 'Guerreros de CH', 'Los Santiagueros', 'Titanes', 'Royals del Cerro', 'Guerreros de PN'];
+            
+            standings.grupoA = standings.grupoA.filter(team => grupoATeams.includes(team.name));
+            standings.grupoB = standings.grupoB.filter(team => grupoBTeams.includes(team.name));
+
+            // Ordenar por juegos ganados, luego por diferencia
+            standings.grupoA.sort((a, b) => {
+                if (b.jg !== a.jg) return b.jg - a.jg;
+                return b.dif - a.dif;
+            });
+            
+            standings.grupoB.sort((a, b) => {
+                if (b.jg !== a.jg) return b.jg - a.jg;
+                return b.dif - a.dif;
+            });
+
+            return standings;
+        }
+
+        function updateStandingsTable() {
+            const standings = calculateStandings();
+            
+            // Actualizar Grupo A
+            const grupoARows = document.querySelectorAll('.standings-grupo-a tbody tr');
+            standings.grupoA.forEach((team, index) => {
+                if (grupoARows[index]) {
+                    const cells = grupoARows[index].querySelectorAll('td');
+                    cells[0].textContent = team.name;
+                    cells[1].textContent = team.jg;
+                    cells[2].textContent = team.jp;
+                    cells[3].textContent = team.cf;
+                    cells[4].textContent = team.cp;
+                    cells[5].textContent = team.dif > 0 ? `+${team.dif}` : team.dif;
+                }
+            });
+            
+            // Actualizar Grupo B
+            const grupoBRows = document.querySelectorAll('.standings-grupo-b tbody tr');
+            standings.grupoB.forEach((team, index) => {
+                if (grupoBRows[index]) {
+                    const cells = grupoBRows[index].querySelectorAll('td');
+                    cells[0].textContent = team.name;
+                    cells[1].textContent = team.jg;
+                    cells[2].textContent = team.jp;
+                    cells[3].textContent = team.cf;
+                    cells[4].textContent = team.cp;
+                    cells[5].textContent = team.dif > 0 ? `+${team.dif}` : team.dif;
+                }
+            });
+        }
         const jornadasData = [
             {
                 numero: 1, fechas: [
@@ -1026,7 +1285,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
                     <circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="20"/>
                 </svg>
-                <span class="hidden sm:inline">Generando...</span>
+                <span class="hidden sm:inline">...</span>
             `;
 
             try {
@@ -1052,7 +1311,7 @@
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
                 </svg>
-                <span class="hidden sm:inline">Descargar PDF</span>
+                <span class="hidden sm:inline">PDF</span>
             `;
         }
 
@@ -1081,7 +1340,7 @@
         function getLogoHTML(team, mobile = false) {
             const logoUrl = TEAM_LOGOS[team.id];
             const color = TEAM_COLORS[team.id] || '#e85d04';
-            const size = mobile ? 'font-size: 0.65rem;' : '';
+            const size = mobile ? 'font-size: 0.6rem;' : '';
             
             if (logoUrl && logoUrl.trim() !== '') {
                 return `<img src="${logoUrl}" alt="${team.name}" onerror="this.parentElement.innerHTML='<span class=\\'team-logo-initials\\' style=\\'color:${color};${size}\\'>${team.abbr}</span>'">`;
@@ -1183,39 +1442,44 @@
                         matchRow.className = 'match-row';
 
                         if (isMobile) {
-                            // Mobile layout - lineal
+                            // Mobile layout - nombres completos en dos lineas
                             if (hasResult) {
                                 matchRow.innerHTML = `
-                                    <div class="time-cell">
+                                    <div class="match-row-time">
                                         <span class="time-badge">${partido.hora}</span>
+                                        <span class="played-badge-mobile">Final</span>
                                     </div>
-                                    <div class="mobile-team-home">
-                                        <span class="team-name ${team1Class}">${team1.name}</span>
-                                        <div class="team-logo-wrapper">${getLogoHTML(team1, true)}</div>
-                                    </div>
-                                    <div class="mobile-score">
-                                        <span class="score-number ${score1Class}">${partido.goles1}</span>
-                                        <span class="score-divider">-</span>
-                                        <span class="score-number ${score2Class}">${partido.goles2}</span>
-                                    </div>
-                                    <div class="mobile-team-away">
-                                        <div class="team-logo-wrapper">${getLogoHTML(team2, true)}</div>
-                                        <span class="team-name ${team2Class}">${team2.name}</span>
+                                    <div class="match-row-content">
+                                        <div class="team-cell">
+                                            <div class="team-logo-wrapper">${getLogoHTML(team1, true)}</div>
+                                            <span class="team-name ${team1Class}">${team1.name}</span>
+                                        </div>
+                                        <div class="mobile-score">
+                                            <span class="score-number ${score1Class}">${partido.goles1}</span>
+                                            <span class="score-divider">-</span>
+                                            <span class="score-number ${score2Class}">${partido.goles2}</span>
+                                        </div>
+                                        <div class="team-cell">
+                                            <div class="team-logo-wrapper">${getLogoHTML(team2, true)}</div>
+                                            <span class="team-name ${team2Class}">${team2.name}</span>
+                                        </div>
                                     </div>
                                 `;
                             } else {
                                 matchRow.innerHTML = `
-                                    <div class="time-cell">
+                                    <div class="match-row-time">
                                         <span class="time-badge">${partido.hora}</span>
                                     </div>
-                                    <div class="mobile-team-home">
-                                        <span class="team-name">${team1.name}</span>
-                                        <div class="team-logo-wrapper">${getLogoHTML(team1, true)}</div>
-                                    </div>
-                                    <span class="mobile-vs">VS</span>
-                                    <div class="mobile-team-away">
-                                        <div class="team-logo-wrapper">${getLogoHTML(team2, true)}</div>
-                                        <span class="team-name">${team2.name}</span>
+                                    <div class="match-row-content">
+                                        <div class="team-cell">
+                                            <div class="team-logo-wrapper">${getLogoHTML(team1, true)}</div>
+                                            <span class="team-name">${team1.name}</span>
+                                        </div>
+                                        <span class="mobile-vs">VS</span>
+                                        <div class="team-cell">
+                                            <div class="team-logo-wrapper">${getLogoHTML(team2, true)}</div>
+                                            <span class="team-name">${team2.name}</span>
+                                        </div>
                                     </div>
                                 `;
                             }
@@ -1304,7 +1568,6 @@
             downloadPdfBtn.addEventListener('click', downloadPDF);
             printBtn.addEventListener('click', () => window.print());
 
-            // Re-render on resize
             let resizeTimeout;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimeout);
